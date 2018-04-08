@@ -104,7 +104,7 @@ for i in range(width-1,0):
             vertex.append((i, j))
             while(coordinate[j][i] == 1 and j not in wall):
                 wall.append(j)
-                j=j+1
+                j = j + 1
             vertex.append((i, j-1))
 wall.clear()
 
