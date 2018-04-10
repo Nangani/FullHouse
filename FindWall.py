@@ -6,66 +6,88 @@ import sys
 import math
 import cv2 as cv
 import numpy as np
+from PIL import Image
+from PIL import ImageDraw
+import requests
 
+def isWaterMark(hsv, j1, i1, j2, i2):
+    if -3 <= int(hsv[j1, i1][0]) - int(hsv[j2, i2][0]) and int(hsv[j1, i1][0]) - int(hsv[j2, i2][0]) <= 3 and -60 <= int(hsv[j1, i1][1]) - int(hsv[j2, i2][1]) and int(hsv[j1, i1][1]) - int(hsv[j2, i2][1]) <= 0\
+            and 0 <= int(hsv[j1, i1][2]) - int(hsv[j2, i2][2]) and int(hsv[j1, i1][2]) - int(hsv[j2, i2][2]) <= 30 and int(hsv[j2, i2][2]) <= 25:
+        return True
+    else:
+        return False
 
 def main(argv):
-    ## [load]
-    default_file =  "123.png"
+    default_file =  "plan3.jpg"
     filename = argv[0] if len(argv) > 0 else default_file
 
     # Loads an image
-    src = cv.imread(filename, cv.IMREAD_GRAYSCALE)
-    i1 = cv.imread(filename, cv.IMREAD_COLOR)
+    src = cv.imread(filename, cv.IMREAD_COLOR)
 
     # Check if image is loaded fine
     if src is None:
         print ('Error opening image!')
         print ('Usage: hough_lines.py [image_name -- default ' + default_file + '] \n')
         return -1
-    ## [load]
 
-    ## [edge_detection]
-    # Edge detection
-    dst = cv.Canny(src, 100, 200, None, 3)
-    ## [edge_detection]
+    hsvImage = cv.cvtColor(src, cv.COLOR_BGR2HSV)
+    cv.imshow("hsvImage", hsvImage)
+    lower = np.array([[[0, 0, 0]]])
+    upper = np.array([[[255, 255, 45]]])
+    mask = cv.inRange(hsvImage, lower, upper)
 
+    cv.imshow("mask", mask)
 
-    lower = np.array([0])
-    upper = np.array([10])
-    hsvi = cv.cvtColor(i1, cv.COLOR_BGR2HSV)
-    mask = cv.inRange(src, lower, upper)
-    cv.imshow("1", src)
-    cv.imshow("2", mask)
-    cv.imshow("3", hsvi[:,:,2])
-    lower1 = np.array([[[0, 0, 0]]])
-    upper1 = np.array([[[20, 60, 40]]])
-    mask2 = hsvi[:,:,2]
-    #mask2 = cv.inRange(hsvi, lower1, upper1)
-    cv.imshow("4", i1)
-    cv.imshow("5", mask2)
-    mask3 = cv.inRange(mask2, lower1, upper1)
-    cv.imshow("6", mask3)
+    aaaa = Image.open(default_file)
+    (width, height) = aaaa.size
+    print(width)
+    print(height)
+    print(hsvImage[280, 200])
+    #(width, height) = hsvi.size
+    for i in range(1, width-1):
+        for j in range(1, height-1):
+            if j - 1 >= 0 and isWaterMark(hsvImage, j, i, j - 1, i):
+               # print(hsvi[j, i])
+                #print(hsvi[j-1, i])
+               # print((int(hsvi[j, i][1]) + int(hsvi[j-1, i][1])) / 2)
+               # print(hsvi[j, i][1])
+               #
+               hsvImage[j, i][0] = hsvImage[j - 1, i][0]
+               hsvImage[j, i][1] = hsvImage[j - 1, i][1]
+               hsvImage[j, i][2] = hsvImage[j - 1, i][2]
 
-    black = np.uint8([[[0, 0, 0]]])
-    hsv_black = cv.cvtColor(black, cv.COLOR_BGR2HSV)
-    print(hsv_black)
+               #hsvi[j, i][1] = (int(hsvi[j, i][1]) + int(hsvi[j-1, i][1])) / 2
+               #hsvi[j, i][2] = (int(hsvi[j, i][2]) + int(hsvi[j-1, i][2])) / 2
 
-    lower2 = np.array([0, 0, 0])
-    upper2 = np.array([80, 80, 80])
-    asdf = cv.inRange(i1, lower2, upper2)
-    cv.imshow("7", asdf)
+            #elif j + 1 < height and isWaterMark(hsvi, j, i, j + 1, i):
+             #   hsvi[j, i][1] = hsvi[j+1, i][1]
+              #  hsvi[j, i][2] = hsvi[j+1, i][2]
 
-    #hsv = cv.cvtColor(src, cv.COLOR_BGR2HSV)
-    #lower = np.array
-    #mask = cv.inRange(hsv, lower, upper)
+            elif i - 1 >= 0 and isWaterMark(hsvImage, j, i, j, i - 1):
+                hsvImage[j, i][0] = hsvImage[j, i - 1][0]
+                hsvImage[j, i][1] = hsvImage[j, i - 1][1]
+                hsvImage[j, i][2] = hsvImage[j, i - 1][2]
+                #hsvi[j, i][1] = (int(hsvi[j, i][1]) + int(hsvi[j, i - 1][1])) / 2
+                #hsvi[j, i][2] = (int(hsvi[j, i][2]) + int(hsvi[j, i - 1][2])) / 2
+            '''
+            elif i + 1 < width and isWaterMark(hsvi, j, i, j, i + 1):
+                hsvi[j, i][1] = hsvi[j, i+1][1]
+                hsvi[j, i][2] = hsvi[j, i+1][2]
+        '''
+
+    cv.imshow("water", hsvImage[:, :, 2])
+
+    mask5 = hsvImage[:, :, 2]
+    mask55 = cv.inRange(mask5, lower, upper)
+    cv.imshow("mask55", mask55)
 
     # Copy edges to the images that will display the results in BGR
-    cdst = cv.cvtColor(mask3, cv.COLOR_GRAY2BGR)
+    cdst = cv.cvtColor(mask55, cv.COLOR_GRAY2BGR)
     cdstP = np.copy(cdst)
 
     ## [hough_lines]
     #  Standard Hough Line Transform
-    lines = cv.HoughLines(mask3, 1, np.pi / 180, 150, None, 0, 0)
+    lines = cv.HoughLines(mask55, 1, np.pi / 180, 150, None, 0, 0)
     ## [hough_lines]
     ## [draw_lines]
     # Draw the lines
@@ -85,7 +107,7 @@ def main(argv):
 
     ## [hough_lines_p]
     # Probabilistic Line Transform
-    linesP = cv.HoughLinesP(mask3, 1, np.pi / 180, 20, None, 5, 10)
+    linesP = cv.HoughLinesP(mask55, 1, np.pi / 180, 20, None, 5, 10)
     ## [hough_lines_p]
     ## [draw_lines_p]
     # Draw the lines
