@@ -20,9 +20,12 @@
 <body>
     <div id='container'></div>
     <?php
+        $_FILES['img']['name']="plan.png";
+        $uploadAddr = '/var/www/html/'
+        $uploadFile = $uploadFile = $uploadAddr.basename($_FILES['img']['name']);
+        move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile))
+        exec('FindWall.py');
         $python = exec ('PrintWall.py');
-       
-        #echo $python;
     ?>
         <input type="hidden" id="walls" value=<?php echo "\"".$python."\"";?>>
         <script type="text/javascript">
