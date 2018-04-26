@@ -1,28 +1,18 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-	    <meta charset="utf-8">
-	    <link rel="stylesheet" type="text/css" href="main.css">
-	</head>
+<head>
+    <meta charset="utf-8">
 
-	<body>
-		<img class="main_image" src="image/main.png">
 
-	    <form enctype="multipart/form-data" action="ShowWall.php" id ="plan" name="plana" method="POST">
-	    	<button class="replace">Load Image</button>
-	    	<input type="file" name="img" class="upload" onchange=aa(); />
-	    </form>
-	    
-	    <button class="button_make">Make Plan</button>
-	</body>
-<script>
-	function aa() {
-		if(document.plana.img.value != "") {
-			document.plana.action = "ShowWall.php";
-			document.plana.submit();
-		}
-	}
-</script>
+
+</head>
+
+<body>
+    <form enctype="multipart/form-data" action="ShowWall.php" id ="plan" method="POST">
+        <input type="file" name="img"/>
+        <input type="submit" value="파일 전송"/>
+    </form>
+</body>
+
 </html>
-
