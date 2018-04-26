@@ -14,6 +14,7 @@ for i in range(0,height-1):
     for j in range(0,width-1):
         if(coordinate[i][j]*4+coordinate[i][j+1]*2+coordinate[i+1][j]*2+coordinate[i-1][j]*2+coordinate[i][j-1]*2+coordinate[i+1][j+1]*1+coordinate[i-1][j+1]*1+coordinate[i+1][j-1]*1+coordinate[i-1][j-1]*1<9):
             coordinate[i][j]=0
+
 """
 111  111  001  100
 110  011  011  110

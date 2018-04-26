@@ -21,20 +21,22 @@
     <div id='container'></div>
     <?php
         $_FILES['img']['name']="plan.png";
-        $uploadAddr = '/var/www/html/'
-        $uploadFile = $uploadFile = $uploadAddr.basename($_FILES['img']['name']);
-        move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile))
-        exec('FindWall.py');
-        $python = exec ('PrintWall.py');
+        $uploadAddr = '/var/www/html/';
+        $uploadFile = $uploadAddr.basename($_FILES['img']['name']);
+        move_uploaded_file($_FILES['img']['tmp_name'], 'plan.png');
+        exec('C:\Python36-32\python.exe C:/xampp/htdocs/FindWall.py');
+        $python = exec ('C:\Python36-32\python.exe PrintWall.py');
+       
+      
     ?>
-        <input type="hidden" id="walls" value=<?php echo "\"".$python."\"";?>>
+        <input type="hidden" id="walls" value=<?php echo "\"".$python."\"";?> >
         <script type="text/javascript">
             var $ = function(id) {return document.getElementById(id)};
             
             var map = document.getElementById("walls");
             
             var UNITWIDTH = 6;
-            var UNITHEIGHT = 18;
+            var UNITHEIGHT = 150;
 
             var camera, scene, renderer, controls;
             var mapSize;
@@ -100,35 +102,18 @@
             map = JSON.parse(data);
 
             function createMazeCubes() {
-                /*map = [
-                    [0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-                    [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-                    [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0],
-                    [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                    [1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
-                    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0],
-                    [1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0]
-                ];*/
                 console.log(map);
               
-
+                //var texture = new THREE.TextureLoader().load("stone.jpg");
                 var cubeGeo = new THREE.BoxGeometry(UNITWIDTH, UNITHEIGHT, UNITWIDTH);
-                var cubeMat = new THREE.MeshPhongMaterial({
-                    color: 0xff0000,
-                });
+                var cubeMat = [
+                    new THREE.MeshBasicMaterial({color: 0x8f8f8f}), //right side
+                    new THREE.MeshBasicMaterial({color: 0x8f8f8f}), //left side
+                    new THREE.MeshBasicMaterial({color: 0x000000}), //top side
+                    new THREE.MeshBasicMaterial({color: 0x8f8f8f}), //bottom side
+                    new THREE.MeshBasicMaterial({color: 0x8f8f8f}), //front side
+                    new THREE.MeshBasicMaterial({color: 0x8f8f8f}) //back side
+                ];
 
                 var widthOffset = UNITWIDTH / 2;
                 var heightOffset = UNITHEIGHT / 2;
