@@ -24,10 +24,10 @@
         $uploadAddr = '/var/www/html/';
         $uploadFile = $uploadAddr.basename($_FILES['img']['name']);
         move_uploaded_file($_FILES['img']['tmp_name'], 'plan.png');
-        exec('python3 FindWall.py');
-        $python = exec ('python3 PrintWall.py');
+        exec('C:\Python36-32\python.exe C:/xampp/htdocs/FindWall.py');
+        $python = exec ('C:\Python36-32\python.exe PrintWall.py');
        
-
+      
     ?>
         <input type="hidden" id="walls" value=<?php echo "\"".$python."\"";?> >
         <script type="text/javascript">
@@ -35,8 +35,8 @@
             
             var map = document.getElementById("walls");
             
-            var UNITWIDTH = 6;
-            var UNITHEIGHT = 150;
+            var UNITWIDTH = 1;
+            var UNITHEIGHT = 25;
 
             var camera, scene, renderer, controls;
             var mapSize;
@@ -57,7 +57,7 @@
                 container.appendChild(renderer.domElement);
 
                 camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
-                camera.position.y = 2000;
+                camera.position.y = 500;
                 camera.position.x = 0;
                 camera.position.z = 0;
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -76,12 +76,12 @@
                     BOTTOM:40
                 }
                 
-                controls.minDistance = 500;
+                controls.minDistance = 48;
                 controls.maxDistance = 2000;
                 controls.maxPolarAngle = Math.PI / 2;
 
                 createMazeCubes();
-
+                createGround();
                 addLights();
 
                 window.addEventListener('resize', onWindowResize, false);
@@ -119,6 +119,7 @@
                 var heightOffset = UNITHEIGHT / 2;
 
                 totalCubesWide = map.length;
+                totalCubesHeight = map[0].length;
                 console.log(map[0].length);
                 for (var i = 0; i < totalCubesWide; i++) {
                     for (var j = 0; j < map[i].length; j++) {
@@ -134,6 +135,7 @@
                     }
                 }
                 mapSize = totalCubesWide * UNITWIDTH;
+                mapHeight = totalCubesHeight * UNITWIDTH;
             }
 
             function createPerimWalls() {
@@ -166,9 +168,13 @@
             }
 
             function createGround() {
-                var groundGeo = new THREE.PlaneGeometry(mapSize, mapSize);
+                var texture = new THREE.TextureLoader().load("/image/floor.png");
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(4, 4);
+                var groundGeo = new THREE.PlaneGeometry(mapHeight+100, mapSize);
                 var groundMat = new THREE.MeshPhongMaterial({
-                    color: 0xA0522D,
+                    map: texture,
                     side: THREE.DoubleSide
                 });
 
