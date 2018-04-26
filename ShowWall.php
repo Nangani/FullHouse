@@ -24,10 +24,10 @@
         $uploadAddr = '/var/www/html/';
         $uploadFile = $uploadAddr.basename($_FILES['img']['name']);
         move_uploaded_file($_FILES['img']['tmp_name'], 'plan.png');
-        exec('C:\Python36-32\python.exe C:/xampp/htdocs/FindWall.py');
-        $python = exec ('C:\Python36-32\python.exe PrintWall.py');
+        exec('python3 FindWall.py');
+        $python = exec ('python3 PrintWall.py');
        
-      
+
     ?>
         <input type="hidden" id="walls" value=<?php echo "\"".$python."\"";?> >
         <script type="text/javascript">
