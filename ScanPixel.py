@@ -34,7 +34,7 @@ def clockwiseangle_and_distance(point):
     # but if two vectors have the same angle then the shorter distance should come first.
     return angle, lenvector
 
-image = Image.open("sample.png")
+image = Image.open("temp.png")
 px = image.load()
 vertex = []
 wallStart = []
@@ -45,7 +45,6 @@ sample = Image.new("RGB",(width,height))
 draw = ImageDraw.Draw(sample)
 
 coordinate = [[0 for col in range(width)] for row in range(height)]
-print(image.size)
 for i in range(0,height-1):
     for j in range(0,width-1):
         if px[j,i] >= (220,220,220):
@@ -61,7 +60,7 @@ for i in range(0,height-1):
     for j in range(0,width-1):
         if(coordinate[i][j]==1):
             px2[j,i]=(0,255,255)
-sample2.show()
+
 for i in range(0,height-1):
     for j in range(0,width-1):
         if (j in wall):
@@ -111,10 +110,15 @@ wall.clear()
 
 
 origin = centroid(vertex)
-print(origin)
+
 
 vertex.sort(key=clockwiseangle_and_distance)
 draw.polygon(vertex,fill=200)
+px2 = sample.load()
+for i in range(0,height-1):
+	for j in range (0,width-1):
+		if(px2[j,i]==(200,0,0)):
+			coordinate[i][j]==1
 sample.show()
 size=len(vertex)
 for i in range(0,size):
@@ -123,15 +127,8 @@ for i in range(0,size):
     (x2,y2) = vertex[j]
     AAAA = AAAA+x1*y2
     AAAA = AAAA-y1*x2
+print(coordinate)
 
-asd = sample.load()
-for i in range(0,height-1):
-    for j in range(0,width-1):
-        if asd[j,i] >= (200,0,0):
-            AA=AA+1
-print(AA)
-print(AAAA/2)
-print(vertex)
 
 #print(wallEnd)
 #for row in coordinate:
