@@ -24,10 +24,13 @@
         $uploadAddr = '/var/www/html/';
         $uploadFile = $uploadAddr.basename($_FILES['img']['name']);
         move_uploaded_file($_FILES['img']['tmp_name'], 'plan.png');
-        exec('python3 FindWall.py');
-        $python = exec ('python3 PrintWall.py');
-       
+	$error =  exec('/usr/bin/python FindWall.py');
+	
+	echo $error;
+	
+	$python = exec ('python3 PrintWall.py');
 
+       
     ?>
         <input type="hidden" id="walls" value=<?php echo "\"".$python."\"";?> >
         <script type="text/javascript">
@@ -81,7 +84,7 @@
                 controls.maxPolarAngle = Math.PI / 2;
 
                 createMazeCubes();
-
+		createGround();
                 addLights();
 
                 window.addEventListener('resize', onWindowResize, false);
@@ -166,9 +169,10 @@
             }
 
             function createGround() {
-                var groundGeo = new THREE.PlaneGeometry(mapSize, mapSize);
-                var groundMat = new THREE.MeshPhongMaterial({
-                    color: 0xA0522D,
+                var texture = new THREE.TextureLoader().load("image/floor.png");
+		var groundGeo = new THREE.PlaneGeometry(mapSize, mapSize);
+                var groundMat = new THREE.MeshBasicMaterial({
+                    map:texture,
                     side: THREE.DoubleSide
                 });
 
