@@ -24,14 +24,14 @@
         $uploadAddr = '/var/www/html/';
         $uploadFile = $uploadAddr.basename($_FILES['img']['name']);
         move_uploaded_file($_FILES['img']['tmp_name'], 'plan.png');
-<<<<<<< HEAD
+
 	$error =  exec('/usr/bin/python FindWall.py');
 	
 
 	
 	$python = exec ('python3 PrintWall.py');
     
->>>>>>> 0ad8d30226b99b234201e4dde5ce9837390c9268
+
     ?>
         <input type="hidden" id="walls" value=<?php echo "\"".$python."\"";?> >
         <script type="text/javascript">
@@ -85,11 +85,8 @@
                 controls.maxPolarAngle = Math.PI / 2;
 
                 createMazeCubes();
-<<<<<<< HEAD
-		createGround();
-=======
                 createGround();
->>>>>>> 0ad8d30226b99b234201e4dde5ce9837390c9268
+
                 addLights();
 
                 window.addEventListener('resize', onWindowResize, false);
@@ -176,12 +173,12 @@
             }
 
             function createGround() {
-<<<<<<< HEAD
-                var texture = new THREE.TextureLoader().load("image/floor.png");
-		var groundGeo = new THREE.PlaneGeometry(mapSize, mapSize);
-                var groundMat = new THREE.MeshBasicMaterial({
-                    map:texture,
-=======
+
+
+
+
+
+
                 var texture = new THREE.TextureLoader().load("/image/floor.png");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
@@ -189,7 +186,7 @@
                 var groundGeo = new THREE.PlaneGeometry(mapHeight+100, mapSize);
                 var groundMat = new THREE.MeshPhongMaterial({
                     map: texture,
->>>>>>> 0ad8d30226b99b234201e4dde5ce9837390c9268
+
                     side: THREE.DoubleSide
                 });
 

@@ -117,8 +117,8 @@ draw.polygon(vertex,fill=200)
 px2 = sample.load()
 for i in range(0,height-1):
 	for j in range (0,width-1):
-		if(px2[j,i]==(200,0,0)):
-			coordinate[i][j]==1
+		if(px2[j,i] >= (200,0,0)):
+			coordinate[i][j]=1
 sample.show()
 size=len(vertex)
 for i in range(0,size):
