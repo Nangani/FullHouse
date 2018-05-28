@@ -1,5 +1,7 @@
 from PIL import Image
-
+import cv2 as cv
+import numpy as np
+import test_door1
 
 image = Image.open("temp.png")
 px = image.load()
@@ -72,4 +74,28 @@ for i in range(0,height-1):
         else:
             coordinate[i][j] = 1
 
-print(coordinate)
+door = test_door1.findDoor()
+
+flag = 0
+
+for k in range(0, len(door)):
+    start_x = door[k][1]
+    start_y = door[k][0]
+    len_x = door[k][3]
+    len_y = door[k][2]
+    x = int((start_x + len_x) / 2)
+    y = int((start_y + len_y) / 2)
+
+    for j in range(10, 50):
+        for i in range(start_x, start_x + len_x):
+            if i >= height or y - j < 0 or y + j >= width:
+                break
+            if coordinate[i][y - j] == 1 and coordinate[i][y + j] == 1:
+                for jj in range(y - j, y + j + 1):
+                    coordinate[i][jj] = 2
+                flag = 1
+        if flag == 1:
+            break
+
+cv.imshow('asdf', np.array(coordinate))
+cv.waitKey(0)
