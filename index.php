@@ -14,14 +14,16 @@
 	    	<input type="file" name="img" class="upload" onchange=aa(); />
 	    </form>
 	    
-	    <button class="button_make">Make Plan</button>
-	</body>
+	    <button class="button_make" onclick="makepage()">Make Plan</button>
 <script>
 	function aa() {
 		if(document.plana.img.value != "") {
-			document.plana.action = "ShowWall.php";
+			document.plana.action = "workpage2.php";
 			document.plana.submit();
 		}
+	}
+	function makepage() {
+		location.replace("makepage.html");
 	}
 </script>
 </html>
