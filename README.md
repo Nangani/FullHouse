@@ -1,3 +1,4 @@
 # FullHouse
-This Web interior program.
-you can input the plan and get the 3D modeling
+
+사용자가 입력한 평면도를 바탕으로 벽지를 바르거나, 가구를 배치하는 등 인테리어를
+도와주는 웹사이트 입니다.
